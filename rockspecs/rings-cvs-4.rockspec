@@ -17,7 +17,7 @@ dependencies = {
    "lua >= 5.1"
 }
 build = {
-   type = "module",
+   type = "builtin",
    modules = {
     rings = "src/rings.c",
     stable = "src/stable.lua"

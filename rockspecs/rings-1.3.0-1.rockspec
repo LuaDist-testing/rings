@@ -1,17 +1,9 @@
--- This file was automatically generated for the LuaDist project.
+package = "Rings"
+version = "1.3.0-1"
 
-package = "rings"
-version = "1.2.3-2"
-
--- LuaDist source
 source = {
-  tag = "1.2.3-2",
-  url = "git://github.com/LuaDist-testing/rings.git"
+   url = "http://www.keplerproject.org/rings/rings-1.3.0.tar.gz",
 }
--- Original source
--- source = {
---    url = "http://cloud.github.com/downloads/keplerproject/rings/rings-1.2.3.tar.gz",
--- }
 
 description = {
    summary = "Create new Lua states from within Lua",
@@ -27,10 +19,9 @@ dependencies = {
    "lua >= 5.1"
 }
 build = {
-   type = "module",
+   type = "builtin",
    modules = {
     rings = "src/rings.c",
     stable = "src/stable.lua"
-   },
-   copy_directories = { "doc", "tests" }
+   }
 }
