@@ -1,6 +1,6 @@
 /*
 ** Rings: Multiple Lua States
-** $Id: rings.c,v 1.22 2008/05/08 22:08:31 carregal Exp $
+** $Id: rings.c,v 1.24 2008/06/30 17:52:31 carregal Exp $
 ** See Copyright Notice in license.html
 */
 
@@ -141,13 +141,13 @@ static int dostring (lua_State *dst, lua_State *src, void *cache, int idx) {
       int ret_top = lua_gettop (dst);
       lua_pushboolean (src, 1); /* Push status = OK */
       copy_values (src, dst, base+1, ret_top); /* Return values to src */
-      lua_pop (dst, ret_top-base);
+      lua_pop (dst, ret_top - base+1);
       return 1+(ret_top-base); /* Return true (success) plus return values */
     }
   }
   lua_pushboolean (src, 0); /* Push status = ERR */
   lua_pushstring (src, lua_tostring (dst, -1));
-  lua_pop (dst, 1); /* pops result from dst state */
+  lua_pop (dst, 2); /* pops debug.traceback and result from dst state */
   return 2;
 }
 
@@ -327,7 +327,7 @@ static void set_info (lua_State *L) {
 	lua_pushliteral (L, "_DESCRIPTION");
 	lua_pushliteral (L, "Rings: Multiple Lua States");
 	lua_settable (L, -3);    lua_pushliteral (L, "_VERSION");
-	lua_pushliteral (L, "Rings 1.2.1");
+	lua_pushliteral (L, "Rings 1.2.2");
 	lua_settable (L, -3);
 }
 

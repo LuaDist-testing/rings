@@ -1,8 +1,18 @@
-package = "Rings"
-version = "1.2.1-1"
+-- This file was automatically generated for the LuaDist project.
+
+package = "rings"
+version = "1.2.2-1"
+
+-- LuaDist source
 source = {
-   url = "http://luaforge.net/frs/download.php/3348/rings-1.2.1.tar.gz",
+  tag = "1.2.2-1",
+  url = "git://github.com/LuaDist-testing/rings.git"
 }
+-- Original source
+-- source = {
+--    url = "http://luaforge.net/frs/download.php/3511/rings-1.2.2.tar.gz",
+-- }
+
 description = {
    summary = "Create new Lua states from within Lua",
    detailed = [[
