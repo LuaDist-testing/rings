@@ -1,11 +1,11 @@
 -- This file was automatically generated for the LuaDist project.
 
 package = "rings"
-version = "1.2.3-1"
+version = "1.2.3-2"
 
 -- LuaDist source
 source = {
-  tag = "1.2.3-1",
+  tag = "1.2.3-2",
   url = "git://github.com/LuaDist-testing/rings.git"
 }
 -- Original source
@@ -31,5 +31,6 @@ build = {
    modules = {
     rings = "src/rings.c",
     stable = "src/stable.lua"
-   }
+   },
+   copy_directories = { "doc", "tests" }
 }
