@@ -39,7 +39,10 @@ end
 ---------------------------------------------------------------------
 require"rings"
 
+print(rings._VERSION)
+
 S = test_object (rings.new())
+S:dostring([[pcall(require, "luarocks.require")]])
 
 -- How to handle errors on another Lua State?
 
@@ -121,15 +124,7 @@ end
 -- Transfering userdata
 io.write(".")
 local ok, f1, f2, f3 = S:dostring([[ return ..., io.stdout ]], io.stdout)
-local _f1 = tostring(f1)
-local _f2 = tostring(f2)
-assert (_f1 ~= _f2, "Same file objects (io.stdout) in different states (user data objects were supposed not to be copyable")
-print("(reminder: lightuserdata copying is not being tested - line 127).")
--- We should have a test that checks if a lightuserdata can be passed from A to B and back
---[[
-local _stdout = string.gsub (tostring(io.stdout), "%D", "")
-assert (_f1 == _stdout, "Lightuserdata has changed its value when transfered to another state")
---]]
+assert ((not f1) and (not f2), "Same file objects (io.stdout) in different states (user data objects were supposed not to be copyable")
 
 -- Checking cache
 io.write(".")
@@ -164,11 +159,27 @@ collectgarbage()
 io.write(".")
 local NS = test_object (rings.new())
 assert (NS:dostring ([[
+pcall(require, "luarocks.require")
 package.path = ...
 ]], package.path))
 assert (NS:dostring[[require"stable"]])
 assert (type(_state_persistent_table_) == "table", "Stable persistent table was removed")
 assert (_state_persistent_table_.key == "value", "Stable key vanished")
 assert (NS:dostring[[assert(stable.get"key" == "value")]])
+
+-- Checking remotedostring environment
+S = rings.new({ a = 2, b = 3, assert = assert })
+S:dostring([[pcall(require, "luarocks.require")]])
+
+assert (S:dostring[[remotedostring[=[assert(a == 2)]=] ]])
+assert (S:dostring[[remotedostring[=[assert(b == 3)]=] ]])
+assert (S:dostring[[remotedostring[=[assert(print == nil)]=] ]])
+
+-- Checking inherited environment
+
+local env = { msg = "Hi!"}
+local r = rings.new(env)
+r:dostring([[pcall(require, "luarocks.require")]])
+r:dostring([==[remotedostring([[assert(msg == "Hi!", "Environment failure")]])]==])
 
 print"Ok!"

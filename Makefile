@@ -1,7 +1,7 @@
-# $Id: Makefile,v 1.3 2006/12/04 16:01:12 mascarenhas Exp $
+# $Id: Makefile,v 1.5 2008/02/15 20:52:18 carregal Exp $
 
 T= rings
-V= 1.1.0
+V= 1.2.0
 CONFIG= ./config
 
 include $(CONFIG)
@@ -9,15 +9,16 @@ include $(CONFIG)
 SRCS= src/rings.c
 OBJS= src/rings.o
 
-src/$(LIBNAME) : $(OBJS)
-	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(CFLAGS) $(LIB_OPTION) -o src/$(LIBNAME) $(OBJS)
+all: src/rings.so
+
+src/rings.so: $(OBJS)
+	export MACOSX_DEPLOYMENT_TARGET="10.3"; $(CC) $(CFLAGS) $(LIB_OPTION) -o src/rings.so $(OBJS)
 
 install:
 	mkdir -p $(LUA_LIBDIR)
-	cp src/$(LIBNAME) $(LUA_LIBDIR)
-	cd $(LUA_LIBDIR); ln -f -s $(LIBNAME) $T.so
+	cp src/rings.so $(LUA_LIBDIR)
 	mkdir -p $(LUA_DIR)
 	cp src/stable.lua $(LUA_DIR)
 
 clean:
-	rm -f src/$(LIBNAME) $(OBJS)
+	rm -f src/rings.so $(OBJS)
