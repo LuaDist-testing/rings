@@ -1,6 +1,6 @@
 /*
 ** Rings: Multiple Lua States
-** $Id: rings.c,v 1.19 2008/02/15 20:52:18 carregal Exp $
+** $Id: rings.c,v 1.22 2008/05/08 22:08:31 carregal Exp $
 ** See Copyright Notice in license.html
 */
 
@@ -49,6 +49,7 @@ static int state_tostring (lua_State *L) {
 ** Copies values from State src to State dst.
 */
 static void copy_values (lua_State *dst, lua_State *src, int i, int top) {
+  lua_checkstack(dst, top - i + 1);
   for (; i <= top; i++) {
     switch (lua_type (src, i)) {
       case LUA_TNUMBER:
@@ -82,7 +83,7 @@ static void copy_values (lua_State *dst, lua_State *src, int i, int top) {
 ** Leaves the compiled function on top of the stack or the error message
 ** produced by luaL_loadbuffer.
 */
-static int compile_string (lua_State *L, lua_State *src, void *cache, const char *str) {
+static int compile_string (lua_State *L, void *cache, const char *str) {
   if(cache == NULL) {
     lua_pushliteral(L, RINGS_CACHE);
   } else {
@@ -133,7 +134,7 @@ static int dostring (lua_State *dst, lua_State *src, void *cache, int idx) {
   lua_gettable(dst, LUA_REGISTRYINDEX);
   base = lua_gettop (dst);
   idx++; /* ignore first argument (string of code) */
-  if (compile_string (dst, src, cache, str) == 0) { /* Compile OK? => push function */
+  if (compile_string (dst, cache, str) == 0) { /* Compile OK? => push function */
     int arg_top = lua_gettop (src);
     copy_values (dst, src, idx, arg_top); /* Push arguments to dst stack */
     if (lua_pcall (dst, arg_top-idx+1, LUA_MULTRET, base) == 0) { /* run OK? */
@@ -231,7 +232,7 @@ static int state_new (lua_State *L) {
   lua_settable(L, -3);
   lua_pop(L, 1);
  
-  /* load base libraries */
+   /* load base libraries */
   luaL_openlibs(s->L);
 
   /* define dostring function (which runs strings on the master state) */
@@ -295,7 +296,7 @@ static int state_createmetatable (lua_State *L) {
 		return 0;
 	}
 	/* define methods */
-	luaL_openlib (L, NULL, methods, 0);
+	luaL_register(L, NULL, methods);
 	/* define metamethods */
 	lua_pushliteral (L, "__gc");
 	lua_pushcfunction (L, slave_close);
@@ -326,7 +327,7 @@ static void set_info (lua_State *L) {
 	lua_pushliteral (L, "_DESCRIPTION");
 	lua_pushliteral (L, "Rings: Multiple Lua States");
 	lua_settable (L, -3);    lua_pushliteral (L, "_VERSION");
-	lua_pushliteral (L, "Rings 1.2.0");
+	lua_pushliteral (L, "Rings 1.2.1");
 	lua_settable (L, -3);
 }
 
@@ -344,8 +345,8 @@ int luaopen_rings (lua_State *L) {
 		return 0;
 	lua_pop (L, 1);
 	/* define library functions */
-	luaL_openlib (L, RINGS_TABLENAME, rings, 0);
-        lua_pushliteral(L, RINGS_ENV);
+	luaL_register(L, RINGS_TABLENAME, rings);
+    lua_pushliteral(L, RINGS_ENV);
 	lua_newtable (L);
 	lua_settable (L, LUA_REGISTRYINDEX);
 	set_info (L);

@@ -1,7 +1,8 @@
 package = "Rings"
-version = "1.2.0-1"
+version = "cvs-3"
 source = {
-   url = "http://luaforge.net/frs/download.php/3168/rings-1.2.0.tar.gz",
+   url = "cvs://:pserver:anonymous:@cvs.luaforge.net:/cvsroot/rings",
+   cvs_tag = "HEAD",
 }
 description = {
    summary = "Create new Lua states from within Lua",

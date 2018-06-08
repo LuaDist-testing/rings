@@ -1,17 +1,8 @@
--- This file was automatically generated for the LuaDist project.
-
-package = "rings"
-version = "1.2.0-1"
--- LuaDist source
+package = "Rings"
+version = "1.2.1rc1-1"
 source = {
-  tag = "1.2.0-1",
-  url = "git://github.com/LuaDist-testing/rings.git"
+   url = "http://rings.luaforge.net/rings-1.2.1rc1.tar.gz",
 }
--- Original source
--- source = {
---    url = "http://luaforge.net/frs/download.php/3168/rings-1.2.0.tar.gz",
---    md5 = "e727d540b8d93453837f7f86dd3ede95"
--- }
 description = {
    summary = "Create new Lua states from within Lua",
    detailed = [[
@@ -42,7 +33,7 @@ build = {
         type = "make",
        	build_variables = {
          LUA_LIB = "$(LUA_LIBDIR)\\lua5.1.lib",
-         CFLAGS = "$(CFLAGS) /I$(LUA_INCDIR)",
+         CFLAGS = "/MD $(CFLAGS) /I$(LUA_INCDIR)",
        	},
        	install_variables = {
          LUA_LIBDIR = "$(LIBDIR)",

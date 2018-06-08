@@ -1,7 +1,7 @@
 package = "Rings"
-version = "1.2.0-1"
+version = "1.2.1-1"
 source = {
-   url = "http://luaforge.net/frs/download.php/3168/rings-1.2.0.tar.gz",
+   url = "",
 }
 description = {
    summary = "Create new Lua states from within Lua",
